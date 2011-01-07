@@ -1,0 +1,42 @@
+var pcap = require('pcap'),
+	StreamParser = require('./stream_parser').StreamParser,
+	sys = require('sys');
+
+var server_ip = '192.168.1.15';
+
+var xmpp_parser = new StreamParser('UTF-8', 10 * 1024);
+xmpp_parser.addListener('stanza', function(element) {
+	console.log(element);
+});
+xmpp_parser.addListener('end', function() {
+});
+xmpp_parser.write('<stream:stream>');
+
+var tcp_tracker = new pcap.TCP_tracker();
+var interface = '';
+var pcap_session = pcap.createSession(interface, "ip proto \\tcp and tcp port 5222");
+
+tcp_tracker.on('start', function (session) {
+    console.log("Start of TCP session between " + session.src_name + " and " + session.dst_name);
+});
+
+tcp_tracker.on('end', function (session) {
+    console.log("End of TCP session between " + session.src_name + " and " + session.dst_name);
+});
+
+pcap_session.on('packet', function (raw_packet) {
+    var packet = pcap.decode.packet(raw_packet);
+    tcp_tracker.track_packet(packet);
+		var ip  = packet.link.ip,
+		        tcp = ip.tcp,
+		        src = ip.saddr + ":" + tcp.sport;
+		//console.log(src);
+		if(ip.saddr == server_ip || ip.daddr == server_ip) {
+			if(tcp.data_bytes) {
+				console.log('length: ', tcp.data.length);
+				sys.puts(tcp.data);
+				xmpp_parser.write(tcp.data);
+			}
+		}
+});
+
