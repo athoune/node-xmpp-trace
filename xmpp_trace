@@ -7,7 +7,7 @@ var server_ip = '192.168.1.15';
 
 var XmppParser = function(name) {
 	this.name = name;
-	this.parser = new StreamParser('UTF-8', 10 * 1024);
+	this.init();
 	this.parser.addListener('stanza', function(element) {
 		if(name == 'client')
 		console.log(element.toString().red);
@@ -15,12 +15,16 @@ var XmppParser = function(name) {
 		console.log(element.toString().yellow);
 		
 	});
+	var xmpp_parser = this;
 	this.parser.addListener('end', function() {
-		this.first = true;
-		this.parser = new StreamParser('UTF-8', 10 * 1024);
+		xmpp_parser.init();
 	});
-	this.first = true;
 };
+
+XmppParser.prototype.init = function() {
+	this.first = true;
+	this.parser = new StreamParser('UTF-8', 10 * 1024);
+}
 
 XmppParser.prototype.write = function(data) {
 	if(this.first && !( data[0] == 60 && data[1] == 63)) { // <?
