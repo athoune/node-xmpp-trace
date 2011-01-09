@@ -7,3 +7,8 @@ Status
 ------
 
 Early alpha.
+
+Thanks
+------
+
+This work is just glue from node-pcap and node-xmpp, with stolen code and libs from both
