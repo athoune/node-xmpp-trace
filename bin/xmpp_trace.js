@@ -20,7 +20,13 @@ tcp_tracker.on('end', function (session) {
 });
 
 var client_parser = new XmppParser('client');
+client_parser.addListener('stanza', function(element) {
+	console.log(element.toString().red);
+});
 var server_parser = new XmppParser('server');
+server_parser.addListener('stanza', function(element) {
+	console.log(element.toString().yellow);
+});
 
 pcap_session.on('packet', function (raw_packet) {
 	var packet = pcap.decode.packet(raw_packet);
