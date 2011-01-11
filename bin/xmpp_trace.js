@@ -7,7 +7,10 @@ var pcap = require('pcap'),
 
 var NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl';
 
+var targets = {};
+
 var ClientServer = function(server) {
+	targets[server] = this;
 	this.server_ip = server;
 	var cs = this;
 	this.client_parser = new XmppParser('client');
@@ -22,11 +25,11 @@ var ClientServer = function(server) {
 			cs.server_parser.init();
 		}
 	});
-}
+};
 
 var tcp_tracker = new pcap.TCP_tracker();
-var int = '';
-var pcap_session = pcap.createSession(int, "ip proto \\tcp and tcp port 5222");
+var interface = '';
+var pcap_session = pcap.createSession(interface, "ip proto \\tcp and tcp port 5222");
 
 tcp_tracker.on('start', function (session) {
     console.log("Start of TCP session between " + session.src_name + " and " + session.dst_name);
@@ -38,6 +41,8 @@ tcp_tracker.on('end', function (session) {
 
 var clientServer = new ClientServer('192.168.1.15');
 
+console.log("listening".green, Object.keys(targets));
+
 pcap_session.on('packet', function (raw_packet) {
 	var packet = pcap.decode.packet(raw_packet);
 	tcp_tracker.track_packet(packet);
@@ -45,18 +50,16 @@ pcap_session.on('packet', function (raw_packet) {
 		        tcp = ip.tcp,
 		        src = ip.saddr + ":" + tcp.sport;
 		//console.log(src);
-		if(ip.saddr == clientServer.server_ip) {
-			if(tcp.data_bytes) {
+		if(tcp.data_bytes) {
+			if(targets[ip.saddr] != null) {
 				//console.log('server length: '.yellow, tcp.data.length);
 				//sys.puts(tcp.data);
-				clientServer.server_parser.write(tcp.data);
+				targets[ip.saddr].server_parser.write(tcp.data);
 			}
-		}
-		if(ip.daddr == clientServer.server_ip) {
-			if(tcp.data_bytes) {
+			if(targets[ip.daddr] != null) {
 				//console.log('client length: '.red, tcp.data.length);
 				//sys.puts(tcp.data);
-				clientServer.client_parser.write(tcp.data);
+				targets[ip.daddr].client_parser.write(tcp.data);
 			}
 		}
 });
