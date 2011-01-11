@@ -9,6 +9,8 @@ var NS_XMPP_SASL = 'urn:ietf:params:xml:ns:xmpp-sasl';
 
 var targets = {};
 
+process.title = "xmpp_trace";
+
 var ClientServer = function(server) {
 	targets[server] = this;
 	this.server_ip = server;
@@ -39,7 +41,16 @@ tcp_tracker.on('end', function (session) {
     console.log("End of TCP session between " + session.src_name + " and " + session.dst_name);
 });
 
-var clientServer = new ClientServer('192.168.1.15');
+var ips = process.argv;
+ips.shift();
+ips.shift();
+if(ips.length == 0) {
+	sys.error("I need some IP");
+	process.exit(1);
+}
+ips.forEach(function(ip) {
+	new ClientServer(ip);
+})
 
 console.log("listening".green, Object.keys(targets));
 
