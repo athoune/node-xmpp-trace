@@ -29,6 +29,14 @@ var ClientServer = function(server) {
 	});
 };
 
+ClientServer.prototype.write_client = function(data) {
+	this.client_parser.write(data);
+};
+
+ClientServer.prototype.write_server = function(data) {
+	this.server_parser.write(data);
+};
+
 var tcp_tracker = new pcap.TCP_tracker();
 var interface = '';
 var pcap_session = pcap.createSession(interface, "ip proto \\tcp and tcp port 5222");
@@ -65,12 +73,12 @@ pcap_session.on('packet', function (raw_packet) {
 			if(targets[ip.saddr] != null) {
 				//console.log('server length: '.yellow, tcp.data.length);
 				//sys.puts(tcp.data);
-				targets[ip.saddr].server_parser.write(tcp.data);
+				targets[ip.saddr].write_server(tcp.data);
 			}
 			if(targets[ip.daddr] != null) {
 				//console.log('client length: '.red, tcp.data.length);
 				//sys.puts(tcp.data);
-				targets[ip.daddr].client_parser.write(tcp.data);
+				targets[ip.daddr].write_client(tcp.data);
 			}
 		}
 });
