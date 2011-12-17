@@ -1,22 +1,22 @@
 {
-	"name"        : "xmpp-trace",
-	"version"     : "0.0.1",
-	"main"        : "./lib/xmpp-trace",
-	"description" : "pcap sniffing of xmpp's protocol for node.js",
-	"author"      : "Mathieu Lecarme <mathieu@garambrogne.net>",
-	"dependencies": {
-		"node-xmpp": ">= 0.0.4",
-		"colors"   : ">= 0.3.0",
-		"pcap"     : ">= 0.2.6"
-	},
-	"keywords"    : ["xmpp", "pcap"],
-	"repositories": [{
-		"type": "git",
-		"path": "git://github.com/athoune/node-xmpp-trace.git"
-		}],
-	"homepage"    : "http://github.com/athoune/node-xmpp-trace",
-	"bugs"        : "http://github.com/athoune/node-xmpp-trace/issues",
-	"licenses"    : [{ "type": "GPLv3"}],
-	"engine"      : "node",
-	"bin"         : { "xmpp_trace" : "./bin/xmpp_trace.js" }
+    "name"        : "xmpp-trace",
+    "version"     : "0.0.1",
+    "main"        : "./lib/xmpp-trace",
+    "description" : "pcap sniffing of xmpp's protocol for node.js",
+    "author"      : "Mathieu Lecarme <mathieu@garambrogne.net>",
+    "dependencies": {
+        "node-xmpp": ">= 0.0.4",
+        "colors"   : ">= 0.3.0",
+        "pcap"     : ">= 0.2.6"
+    },
+    "keywords"    : ["xmpp", "pcap"],
+    "repositories": [{
+        "type": "git",
+        "path": "git://github.com/athoune/node-xmpp-trace.git"
+        }],
+    "homepage"    : "http://github.com/athoune/node-xmpp-trace",
+    "bugs"        : "http://github.com/athoune/node-xmpp-trace/issues",
+    "licenses"    : [{ "type": "GPLv3"}],
+    "engine"      : "node",
+    "bin"         : { "xmpp_trace" : "./bin/xmpp_trace.js" }
 }
