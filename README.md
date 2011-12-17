@@ -24,3 +24,8 @@ Thanks
 ------
 
 This work is just glue from node-pcap and node-xmpp, with stolen code and libs from both.
+
+Licence
+-------
+
+MIT. © 2011 Mathieu Lecarme.

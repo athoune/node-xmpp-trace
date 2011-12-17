@@ -16,7 +16,7 @@
         }],
     "homepage"    : "http://github.com/athoune/node-xmpp-trace",
     "bugs"        : "http://github.com/athoune/node-xmpp-trace/issues",
-    "licenses"    : [{ "type": "GPLv3"}],
+    "licenses"    : [{ "type": "MIT"}],
     "engine"      : "node",
     "bin"         : { "xmpp_trace" : "./bin/xmpp_trace.js" }
 }
